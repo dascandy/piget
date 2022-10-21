@@ -1,0 +1,27 @@
+{
+    "bini": {
+        "source": "direct",
+        "url": "https://github.com/dascandy/bini",
+        "version": ""
+    },
+    "caligo": {
+        "source": "direct",
+        "url": "git@github.com:dascandy/caligo",
+        "version": ""
+    },
+    "catch": {
+        "source": "direct",
+        "url": "https://github.com/evokable/catch",
+        "version": ""
+    },
+    "decoco": {
+        "source": "direct",
+        "url": "git@github.com:dascandy/decoco",
+        "version": ""
+    },
+    "expected": {
+        "source": "direct",
+        "url": "git@github.com:tartanllama/expected",
+        "version": ""
+    }
+}
