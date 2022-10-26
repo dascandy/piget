@@ -13,6 +13,7 @@
 
 struct Object;
 struct GitCAM;
+struct Database;
 
 struct DirEntry {
   uint16_t fileMode;
@@ -93,4 +94,17 @@ struct Object {
   Commit readAsCommit();
 };
 
+std::pair<std::vector<uint8_t>, std::vector<uint8_t>> WritePack(const Database& db, std::vector<std::array<uint8_t, 20>> objectIds);
+
+struct Pack {
+  Pack(std::span<const uint8_t> data, std::span<const uint8_t> index);
+  struct IndexEntry {
+    std::array<uint8_t, 20> id;
+    size_t offset;
+  };
+  std::vector<uint8_t> get(std::array<uint8_t, 20> id);
+private:
+  std::span<const uint8_t> data;
+  std::vector<IndexEntry> index;
+};
 

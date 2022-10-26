@@ -6,10 +6,12 @@
 #include <optional>
 #include <tl/expected.hpp>
 #include <array>
+#include <vector>
 
 struct Object;
 struct GitCAM;
 struct DirEntry;
+struct Pack;
 
 struct Index {
   struct Entry {
@@ -41,9 +43,15 @@ private:
 struct GitCAM {
   GitCAM(std::filesystem::path root);
   std::array<uint8_t, 20> add(Object object);
-  tl::expected<Object, std::error_code> get(std::array<uint8_t, 20> id);
+  tl::expected<Object, std::error_code> get(std::array<uint8_t, 20> id) const;
 
   std::filesystem::path root;
 };
 
+struct Database {
+  GitCAM cam;
+  std::vector<Pack*> packs;
+
+  tl::expected<Object, std::error_code> get(std::array<uint8_t, 20> id) const;
+};
 

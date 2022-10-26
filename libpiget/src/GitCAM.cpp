@@ -40,7 +40,7 @@ std::array<uint8_t, 20> GitCAM::add(Object object) {
   }
 }
 
-tl::expected<Object, std::error_code> GitCAM::get(std::array<uint8_t, 20> hash) {
+tl::expected<Object, std::error_code> GitCAM::get(std::array<uint8_t, 20> hash) const {
   std::string id = asId(hash);
   std::filesystem::path file = root / id.substr(0, 2) / id.substr(2);
   std::error_code ec;
