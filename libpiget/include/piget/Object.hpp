@@ -100,6 +100,7 @@ struct Pack {
   Pack(std::span<const uint8_t> data, std::span<const uint8_t> index);
   struct IndexEntry {
     std::array<uint8_t, 20> id;
+    std::array<uint8_t, 4> crc;
     size_t offset;
   };
   std::vector<uint8_t> get(std::array<uint8_t, 20> id);
