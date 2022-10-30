@@ -82,12 +82,18 @@ struct Commit {
 };
 
 struct Object {
+  enum class Type {
+    Invalid = -1,
+    Commit = 0x1,
+    Tree = 0x2,
+    Object = 0x3,
+  };
   Object(Commit commit);
   Object(std::filesystem::path path);
   Object(Tree tree);
   Object(std::vector<uint8_t> data);
   std::vector<uint8_t> buffer;
-  std::string_view type() const;
+  Object::Type type() const;
   std::span<const uint8_t> data() const;
   std::array<uint8_t, 20> id() const;
   Tree readAsTree();
@@ -102,9 +108,12 @@ struct Pack {
     std::array<uint8_t, 20> id;
     std::array<uint8_t, 4> crc;
     size_t offset;
+    Object::Type type;
   };
-  std::vector<uint8_t> get(std::array<uint8_t, 20> id);
+  std::optional<std::vector<uint8_t>> get(std::array<uint8_t, 20> id);
 private:
+  void LoadIndex(std::span<const uint8_t> in);
+  void RegenerateIndex();
   std::span<const uint8_t> data;
   std::vector<IndexEntry> index;
 };

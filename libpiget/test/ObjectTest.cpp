@@ -10,7 +10,7 @@ TEST_CASE("Convert file to GitCAM object") {
 
   SECTION("Object is correct") {
     REQUIRE(correctObject == obj.buffer);
-    REQUIRE(obj.type() == "blob");
+    REQUIRE(obj.type() == Object::Type::Object);
     std::vector<uint8_t> correctData = { 0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x0a };
     REQUIRE(std::vector<uint8_t>(obj.data().data(), obj.data().data() + obj.data().size()) == correctData);
   }
@@ -38,7 +38,7 @@ TEST_CASE("Convert file to GitCAM object") {
         DirEntry{0100644, "world.txt", worldhash},
         }});
       REQUIRE(correctDirectory == dir.buffer);
-      REQUIRE(dir.type() == "tree");
+      REQUIRE(dir.type() == Object::Type::Tree);
 
       Object obj2(dir.readAsTree());
       REQUIRE(obj2.buffer == dir.buffer);
@@ -69,6 +69,7 @@ TEST_CASE("Convert file to GitCAM object") {
         0x66, 0x69, 0x78, 0x65, 0x64, 0x0a,
     };
     REQUIRE(obj.buffer == correctCommit);
+    REQUIRE(obj.type() == Object::Type::Commit);
     Object obj2(obj.readAsCommit());
     REQUIRE(obj2.buffer == obj.buffer);
   }

@@ -93,7 +93,7 @@ Object::Object(Tree tree) {
 }
 
 Tree Object::readAsTree() {
-  if (type() != "tree") {
+  if (type() != Type::Tree) {
     throw std::runtime_error("Non-tree object in tree position, repo corrupted");
   }
   Tree t;
@@ -122,7 +122,7 @@ Object::Object(Commit commit) {
 }
 
 Commit Object::readAsCommit() {
-  if (type() != "commit") {
+  if (type() != Object::Type::Commit) {
     throw std::runtime_error("Non-commit object in commit position, repo corrupted");
   }
   Commit commit;
@@ -153,10 +153,19 @@ Object::Object(std::vector<uint8_t> data)
 {
 }
 
-std::string_view Object::type() const {
+Object::Type Object::type() const {
   const char* start = (const char*)buffer.data();
   const char* end = strchr(start, ' ');
-  return {start, end};
+  std::string_view sv{start, end};
+  if (sv == "tree") {
+    return Object::Type::Tree;
+  } else if (sv == "commit") {
+    return Object::Type::Commit;
+  } else if (sv == "blob") {
+    return Object::Type::Object;
+  } else {
+    return Object::Type::Invalid;
+  }
 }
 
 std::span<const uint8_t> Object::data() const {
