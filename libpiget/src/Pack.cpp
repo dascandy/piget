@@ -104,7 +104,7 @@ void Pack::RegenerateIndex() {
   }
 }
 
-std::optional<std::vector<uint8_t>> Pack::get(std::array<uint8_t, 20> id) {
+std::optional<Object> Pack::get(std::array<uint8_t, 20> id) {
   auto it = std::lower_bound(index.begin(), index.end(), id, [](const IndexEntry& e, const std::array<uint8_t, 20>& id) {
     for (size_t n = 0; n < 20; n++) {
       if (e.id[n] < id[n]) return true;
@@ -114,7 +114,7 @@ std::optional<std::vector<uint8_t>> Pack::get(std::array<uint8_t, 20> id) {
   });
   if (it == index.end() ||
       it->id != id) return std::nullopt;
-  return Decoco::decompress(Decoco::ZlibDecompressor(), data.subspan(it->offset));
+  return Object(it->type, Decoco::decompress(Decoco::ZlibDecompressor(), data.subspan(it->offset)));
 }
 
 

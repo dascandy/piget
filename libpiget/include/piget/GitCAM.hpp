@@ -43,7 +43,7 @@ private:
 struct GitCAM {
   GitCAM(std::filesystem::path root);
   std::array<uint8_t, 20> add(Object object);
-  tl::expected<Object, std::error_code> get(std::array<uint8_t, 20> id) const;
+  std::optional<Object> get(std::array<uint8_t, 20> id) const;
 
   std::filesystem::path root;
 };
@@ -52,6 +52,9 @@ struct Database {
   GitCAM cam;
   std::vector<Pack*> packs;
 
-  tl::expected<Object, std::error_code> get(std::array<uint8_t, 20> id) const;
+  Database(std::filesystem::path root);
+  std::optional<Object> get(std::array<uint8_t, 20> id) const;
+  void add(const Object& object);
+  void addPack(Pack p);
 };
 

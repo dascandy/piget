@@ -40,12 +40,12 @@ std::array<uint8_t, 20> GitCAM::add(Object object) {
   }
 }
 
-tl::expected<Object, std::error_code> GitCAM::get(std::array<uint8_t, 20> hash) const {
+std::optional<Object> GitCAM::get(std::array<uint8_t, 20> hash) const {
   std::string id = asId(hash);
   std::filesystem::path file = root / id.substr(0, 2) / id.substr(2);
   std::error_code ec;
   size_t size = std::filesystem::file_size(file, ec);
-  if (ec) return tl::make_unexpected(ec);
+  if (ec) return std::nullopt;
   std::vector<uint8_t> buffer;
   buffer.resize(size);
   std::ifstream(file).read(reinterpret_cast<char*>(buffer.data()), buffer.size());

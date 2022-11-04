@@ -148,6 +148,22 @@ Commit Object::readAsCommit() {
   return commit;
 }
 
+Object::Object(Object::Type type, std::vector<uint8_t> data) 
+: buffer(std::move(data))
+{
+  std::string prefix;
+  switch(type) {
+    case Object::Type::Tree: prefix = "tree "; break;
+    case Object::Type::Commit: prefix = "commit "; break;
+    case Object::Type::Object: prefix = "blob "; break;
+    case Object::Type::Invalid: prefix = "invalid "; break;
+  }
+  prefix += std::to_string(data.size());
+  buffer.resize(prefix.size() + 1 + data.size());
+  memcpy(buffer.data(), prefix.data(), prefix.size() + 1);
+  memcpy(buffer.data() + prefix.size() + 1, data.data(), data.size());
+}
+
 Object::Object(std::vector<uint8_t> data) 
 : buffer(std::move(data))
 {

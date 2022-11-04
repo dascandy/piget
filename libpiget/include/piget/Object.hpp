@@ -88,10 +88,12 @@ struct Object {
     Tree = 0x2,
     Object = 0x3,
   };
+  Object(const Object&) = default;
   Object(Commit commit);
   Object(std::filesystem::path path);
   Object(Tree tree);
   Object(std::vector<uint8_t> data);
+  Object(Object::Type type, std::vector<uint8_t> data);
   std::vector<uint8_t> buffer;
   Object::Type type() const;
   std::span<const uint8_t> data() const;
@@ -110,7 +112,7 @@ struct Pack {
     size_t offset;
     Object::Type type;
   };
-  std::optional<std::vector<uint8_t>> get(std::array<uint8_t, 20> id);
+  std::optional<Object> get(std::array<uint8_t, 20> id);
 private:
   void LoadIndex(std::span<const uint8_t> in);
   void RegenerateIndex();
